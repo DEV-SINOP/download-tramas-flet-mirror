@@ -1,8 +1,8 @@
 {
-  "version": "3.1.1-alpha",
-  "release": false,
-  "download_url": "https://github.com/solinftec/download-tramas-flet/releases/latest",
-  "sha256": "",
-  "github_release": "https://github.com/solinftec/download-tramas-flet/releases/latest",
-  "updated_at": "2026-03-24T20:39:02Z"
+  "version": "4.1.1-alpha",
+  "release": true,
+  "download_url": "https://github.com/DEV-SINOP/download-tramas-flet-mirror/releases/download/v4.1.1-alpha/pyinstaller-4.1.0.zip",
+  "sha256": "5c5cb38f4cd107f42872c8694f21e85910554aefc8ac33c50c0eb26457962198",
+  "github_release": "https://github.com/DEV-SINOP/download-tramas-flet-mirror/releases/latest",
+  "updated_at": "2026-03-24T23:13:37Z"
 }
