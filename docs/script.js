@@ -12,8 +12,16 @@ async function loadUpdateInfo() {
 
     // Atualizar a página com informações do JSON
     document.getElementById('current-version').textContent = updateData.version || 'Informação não disponível';
-    document.getElementById('last-update').textContent = updateData.lastUpdate || 'Informação não disponível';
-    document.getElementById('download-link').href = updateData.downloadUrl || '#';
+    // JSON real usa updated_at (e também aceitaremos lastUpdate por compatibilidade)
+    const lastUpdateRaw = updateData.updated_at || updateData.lastUpdate;
+    let lastUpdateText = 'Informação não disponível';
+    if (lastUpdateRaw) {
+      const parsedDate = new Date(lastUpdateRaw);
+      lastUpdateText = !isNaN(parsedDate) ? parsedDate.toLocaleString('pt-BR') : lastUpdateRaw;
+    }
+    document.getElementById('last-update').textContent = lastUpdateText;
+    // JSON real usa download_url (e também aceitaremos downloadUrl por compatibilidade)
+    document.getElementById('download-link').href = updateData.download_url || updateData.downloadUrl || '#';
   } catch (error) {
     console.error('Erro ao carregar as informações da atualização:', error);
     document.getElementById('current-version').textContent = 'Erro ao carregar versão';
