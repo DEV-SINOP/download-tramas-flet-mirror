@@ -1,16 +1,23 @@
 [
-  {
-    "id": "notice-2026-03-25-1",
-    "title": "Manutenção programada",
-    "message": "O sistema estará em manutenção hoje das 23:00 às 00:30.",
-    "updated_at": "2026-03-25T18:00:00Z",
-    "active": true
-  },
-  {
-    "id": "notice-2026-03-10-1",
-    "title": "Atualização concluída",
-    "message": "Nova versão do app disponível com correção de bugs.",
-    "updated_at": "2026-03-10T15:00:00Z",
-    "active": false
-  }
+    {
+        "id": "notice-2026-03-25-1",
+        "title": "Manutenção programada",
+        "message": "O sistema estará em manutenção hoje das 23:00 às 00:30.",
+        "updated_at": "2026-03-25T18:00:00Z",
+        "active": true
+    },
+        {
+        "id": "notice-2026-03-10-1",
+        "title": "Atualização concluída",
+        "message": "Nova versão do app disponível com correção de bugs.",
+        "updated_at": "2026-03-10T15:00:00Z",
+        "active": true
+    },
+    {
+        "id": "notice-2026-03-10-1",
+        "title": "Atualização concluída",
+        "message": "Nova versão do app disponível com correção de bugs.",
+        "updated_at": "2026-03-10T15:00:00Z",
+        "active": false
+    }
 ]
