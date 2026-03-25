@@ -56,6 +56,8 @@ async function loadNotices() {
     const historyEl = document.getElementById('notice-history');
     const prevBtn = document.getElementById('prev-notice');
     const nextBtn = document.getElementById('next-notice');
+    const counterEl = document.getElementById('notice-counter');
+    const controlsEl = document.getElementById('notice-controls');
 
     let currentActiveIndex = 0;
 
@@ -63,18 +65,23 @@ async function loadNotices() {
       if (!activeNotices.length) {
         activeTextEl.textContent = 'Nenhum aviso ativo';
         detailsEl.style.display = 'none';
-        prevBtn.disabled = true;
-        nextBtn.disabled = true;
+        controlsEl.style.display = 'none';
         return;
       }
+
       const notice = activeNotices[index];
-      activeTextEl.textContent = `${index + 1} / ${activeNotices.length} • ${notice.title || 'Aviso ativo'}`;
+      activeTextEl.textContent = `${notice.title || 'Aviso ativo'}`;
       titleEl.textContent = notice.title || '-';
       messageEl.textContent = notice.message || '-';
       dateEl.textContent = notice.updated_at ? new Date(notice.updated_at).toLocaleString('pt-BR') : '-';
       detailsEl.style.display = 'block';
-      prevBtn.disabled = activeNotices.length <= 1;
-      nextBtn.disabled = activeNotices.length <= 1;
+
+      if (activeNotices.length > 1) {
+        controlsEl.style.display = 'flex';
+        counterEl.textContent = `${index + 1} de ${activeNotices.length}`;
+      } else {
+        controlsEl.style.display = 'none';
+      }
     };
 
     prevBtn.addEventListener('click', () => {

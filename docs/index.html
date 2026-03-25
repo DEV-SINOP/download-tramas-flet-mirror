@@ -25,14 +25,15 @@
     <section id="notices">
       <h2>Avisos do App</h2>
       <p><strong>Aviso Atual:</strong> <span id="active-notice">Carregando...</span></p>
-      <div id="notice-controls" style="margin-bottom: 10px;">
-        <button id="prev-notice" class="button" type="button">Anterior</button>
-        <button id="next-notice" class="button" type="button">Próximo</button>
-      </div>
       <div id="notice-details" style="display:none;">
         <p><strong>Título:</strong> <span id="notice-title"></span></p>
         <p><strong>Mensagem:</strong> <span id="notice-message"></span></p>
         <p><strong>Atualizado em:</strong> <span id="notice-date"></span></p>
+      </div>
+      <div id="notice-controls" style="display:none; margin-top: 8px;">
+        <button id="prev-notice" class="small-button" type="button">◀</button>
+        <button id="next-notice" class="small-button" type="button">▶</button>
+        <span id="notice-counter" style="margin-left: 8px; color: #555; font-size: 0.9em;"></span>
       </div>
       <h3>Histórico de Avisos</h3>
       <ul id="notice-history"></ul>
