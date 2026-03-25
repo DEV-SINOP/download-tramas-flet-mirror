@@ -19,10 +19,16 @@
       <h2>Informações da Atualização</h2>
       <p><strong>Versão Atual:</strong> <span id="current-version">Carregando...</span></p>
       <p><strong>Última Atualização:</strong> <span id="last-update">Carregando...</span></p>
+      <h2>Baixe a Última Versão</h2>
+      <a id="download-link" href="#" class="button" download>Fazer Download</a>
     </section>
     <section id="notices">
       <h2>Avisos do App</h2>
       <p><strong>Aviso Atual:</strong> <span id="active-notice">Carregando...</span></p>
+      <div id="notice-controls" style="margin-bottom: 10px;">
+        <button id="prev-notice" class="button" type="button">Anterior</button>
+        <button id="next-notice" class="button" type="button">Próximo</button>
+      </div>
       <div id="notice-details" style="display:none;">
         <p><strong>Título:</strong> <span id="notice-title"></span></p>
         <p><strong>Mensagem:</strong> <span id="notice-message"></span></p>
@@ -30,10 +36,6 @@
       </div>
       <h3>Histórico de Avisos</h3>
       <ul id="notice-history"></ul>
-    </section>
-    <section id="download">
-      <h2>Baixe a Última Versão</h2>
-      <a id="download-link" href="#" class="button" download>Fazer Download</a>
     </section>
   </main>
   <footer>

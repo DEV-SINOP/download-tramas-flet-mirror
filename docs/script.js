@@ -47,24 +47,49 @@ async function loadNotices() {
       throw new Error('Formato inválido do notices.json: deve ser um array.');
     }
 
-    const activeNotice = noticesData.find(n => n.active) || null;
+    const activeNotices = noticesData.filter(n => n.active);
     const activeTextEl = document.getElementById('active-notice');
     const titleEl = document.getElementById('notice-title');
     const messageEl = document.getElementById('notice-message');
     const dateEl = document.getElementById('notice-date');
     const detailsEl = document.getElementById('notice-details');
     const historyEl = document.getElementById('notice-history');
+    const prevBtn = document.getElementById('prev-notice');
+    const nextBtn = document.getElementById('next-notice');
 
-    if (activeNotice) {
-      activeTextEl.textContent = activeNotice.title || 'Aviso ativo';
-      titleEl.textContent = activeNotice.title || '-';
-      messageEl.textContent = activeNotice.message || '-';
-      dateEl.textContent = activeNotice.updated_at ? new Date(activeNotice.updated_at).toLocaleString('pt-BR') : '-';
+    let currentActiveIndex = 0;
+
+    const renderActiveNotice = index => {
+      if (!activeNotices.length) {
+        activeTextEl.textContent = 'Nenhum aviso ativo';
+        detailsEl.style.display = 'none';
+        prevBtn.disabled = true;
+        nextBtn.disabled = true;
+        return;
+      }
+      const notice = activeNotices[index];
+      activeTextEl.textContent = `${index + 1} / ${activeNotices.length} • ${notice.title || 'Aviso ativo'}`;
+      titleEl.textContent = notice.title || '-';
+      messageEl.textContent = notice.message || '-';
+      dateEl.textContent = notice.updated_at ? new Date(notice.updated_at).toLocaleString('pt-BR') : '-';
       detailsEl.style.display = 'block';
-    } else {
-      activeTextEl.textContent = 'Nenhum aviso ativo';
-      detailsEl.style.display = 'none';
-    }
+      prevBtn.disabled = activeNotices.length <= 1;
+      nextBtn.disabled = activeNotices.length <= 1;
+    };
+
+    prevBtn.addEventListener('click', () => {
+      if (!activeNotices.length) return;
+      currentActiveIndex = (currentActiveIndex - 1 + activeNotices.length) % activeNotices.length;
+      renderActiveNotice(currentActiveIndex);
+    });
+
+    nextBtn.addEventListener('click', () => {
+      if (!activeNotices.length) return;
+      currentActiveIndex = (currentActiveIndex + 1) % activeNotices.length;
+      renderActiveNotice(currentActiveIndex);
+    });
+
+    renderActiveNotice(currentActiveIndex);
 
     historyEl.innerHTML = ''; // limpar histórico
     const sorted = noticesData.slice().sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));

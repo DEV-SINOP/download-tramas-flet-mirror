@@ -18,7 +18,7 @@ Esta é uma sugestão de arquitetura para o app desktop/CLI tratar avisos com hi
 
 ## 3) App local (inicialização)
 
-- Tem arquivo de config local (ex: `config.json`) contendo lista de ids lidos:
+- Tem arquivo de config local (ex: `config.cfg`) contendo lista de ids lidos:
   - `read_notices: ["notice-2026-03-10-1"]`
 
 - Ao iniciar, app baixa `notices.json` e encontra `activeNotice`.
