@@ -31,3 +31,51 @@ async function loadUpdateInfo() {
 
 // Carregar dados assim que o JavaScript for executado
 loadUpdateInfo();
+loadNotices();
+
+// Função para carregar avisos (notices.json)
+async function loadNotices() {
+  const noticesPath = 'notices.json';
+  try {
+    const response = await fetch(noticesPath);
+    if (!response.ok) {
+      throw new Error(`Erro ao carregar notices: ${response.status}`);
+    }
+    const noticesData = await response.json();
+
+    if (!Array.isArray(noticesData)) {
+      throw new Error('Formato inválido do notices.json: deve ser um array.');
+    }
+
+    const activeNotice = noticesData.find(n => n.active) || null;
+    const activeTextEl = document.getElementById('active-notice');
+    const titleEl = document.getElementById('notice-title');
+    const messageEl = document.getElementById('notice-message');
+    const dateEl = document.getElementById('notice-date');
+    const detailsEl = document.getElementById('notice-details');
+    const historyEl = document.getElementById('notice-history');
+
+    if (activeNotice) {
+      activeTextEl.textContent = activeNotice.title || 'Aviso ativo';
+      titleEl.textContent = activeNotice.title || '-';
+      messageEl.textContent = activeNotice.message || '-';
+      dateEl.textContent = activeNotice.updated_at ? new Date(activeNotice.updated_at).toLocaleString('pt-BR') : '-';
+      detailsEl.style.display = 'block';
+    } else {
+      activeTextEl.textContent = 'Nenhum aviso ativo';
+      detailsEl.style.display = 'none';
+    }
+
+    historyEl.innerHTML = ''; // limpar histórico
+    const sorted = noticesData.slice().sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
+    sorted.forEach(notice => {
+      const item = document.createElement('li');
+      const date = notice.updated_at ? new Date(notice.updated_at).toLocaleString('pt-BR') : 'Data desconhecida';
+      item.textContent = `${date} · ${notice.title || 'sem título'} ${notice.active ? '(ativo)' : ''}`;
+      historyEl.appendChild(item);
+    });
+  } catch (error) {
+    console.error('Erro ao carregar notices:', error);
+    document.getElementById('active-notice').textContent = 'Erro ao carregar avisos';
+  }
+}

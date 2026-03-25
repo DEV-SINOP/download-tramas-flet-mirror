@@ -26,8 +26,31 @@ main {
   padding: 20px;
 }
 
+/* Layout responsivo para info + notices lado a lado em telas grandes */
+main {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-gap: 20px;
+}
+
 section {
-  margin-bottom: 30px;
+  margin-bottom: 0;
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e2e8f0;
+}
+
+@media (min-width: 900px) {
+  main {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+  }
+
+  section#download {
+    grid-column: 1 / -1;
+  }
 }
 
 h2 {
