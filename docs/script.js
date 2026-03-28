@@ -20,8 +20,31 @@ async function loadUpdateInfo() {
       lastUpdateText = !isNaN(parsedDate) ? parsedDate.toLocaleString('pt-BR') : lastUpdateRaw;
     }
     document.getElementById('last-update').textContent = lastUpdateText;
-    // JSON real usa download_url (e também aceitaremos downloadUrl por compatibilidade)
-    document.getElementById('download-link').href = updateData.download_url || updateData.downloadUrl || '#';
+    // Preferência para novos campos de download por bundle
+    const pyinstallerUrl = updateData.pyinstaller_download_url || updateData.pyinstallerDownloadUrl || updateData.download_url || '#';
+    const nuitkaUrl = updateData.nuitka_download_url || updateData.nuitkaDownloadUrl || '#';
+
+    const pyinstallerLink = document.getElementById('pyinstaller-link');
+    const nuitkaLink = document.getElementById('nuitka-link');
+
+    pyinstallerLink.href = pyinstallerUrl;
+    nuitkaLink.href = nuitkaUrl;
+
+    if (!pyinstallerUrl || pyinstallerUrl === '#') {
+      pyinstallerLink.textContent = 'PyInstaller indisponível';
+      pyinstallerLink.classList.add('disabled');
+      pyinstallerLink.removeAttribute('download');
+      pyinstallerLink.style.pointerEvents = 'none';
+      pyinstallerLink.style.opacity = '0.6';
+    }
+
+    if (!nuitkaUrl || nuitkaUrl === '#') {
+      nuitkaLink.textContent = 'Nuitka indisponível';
+      nuitkaLink.classList.add('disabled');
+      nuitkaLink.removeAttribute('download');
+      nuitkaLink.style.pointerEvents = 'none';
+      nuitkaLink.style.opacity = '0.6';
+    }
   } catch (error) {
     console.error('Erro ao carregar as informações da atualização:', error);
     document.getElementById('current-version').textContent = 'Erro ao carregar versão';
