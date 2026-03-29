@@ -48,7 +48,8 @@ section {
     align-items: start;
   }
 
-  section#download {
+  section#download,
+  section#feedback {
     grid-column: 1 / -1;
   }
 }
