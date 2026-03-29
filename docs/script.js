@@ -14,48 +14,12 @@ function loadUtterances() {
   script.async = true;
   script.crossOrigin = 'anonymous';
   script.setAttribute('repo', GITHUB_REPO);
-  script.setAttribute('issue-term', 'title');
+  script.setAttribute('issue-term', 'pathname');
   script.setAttribute('label', 'feedback');
   script.setAttribute('theme', 'github-light');
 
   container.innerHTML = '';
   container.appendChild(script);
-}
-
-// Função para gerar URL de nova issue e abrir em nova aba
-function openIssueInGitHub(title, body, type) {
-  if (!GITHUB_REPO || GITHUB_REPO.includes('gean-ferreira96')) {
-    alert('Configure GITHUB_REPO em script.js com seu usuário/repo antes de usar.');
-    return;
-  }
-
-  const issueTitle = type ? `[${type}] ${title}` : title;
-  const issueBody = `${body}\n\n---\nEnviado via site de atualização (DownloadTramas).`;
-
-  const url = `https://github.com/${encodeURIComponent(GITHUB_REPO)}/issues/new?` +
-    new URLSearchParams({ title: issueTitle, body: issueBody }).toString();
-
-  window.open(url, '_blank', 'noopener');
-}
-
-// Função para inicar o formulário de issue
-function initIssueForm() {
-  const form = document.getElementById('issue-form');
-  if (!form) return;
-
-  form.addEventListener('submit', event => {
-    event.preventDefault();
-    const type = document.getElementById('issue-type').value.trim();
-    const title = document.getElementById('issue-title').value.trim();
-    const description = document.getElementById('issue-description').value.trim();
-
-    if (!type || !title || !description) {
-      alert('Preencha todos os campos para criar a issue.');
-      return;
-    }
-
-    openIssueInGitHub(title, description, type);
-  });
 }
 
 // Função para carregar dados sobre a atualização
@@ -112,7 +76,6 @@ async function loadUpdateInfo() {
 // Carregar dados assim que o JavaScript for executado
 loadUpdateInfo();
 loadNotices();
-initIssueForm();
 loadUtterances();
 
 // Função para carregar avisos (notices.json)
