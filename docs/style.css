@@ -13,6 +13,18 @@ header {
   text-align: center;
 }
 
+.header-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+
+#logo {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+}
+
 header h1 {
   margin: 0;
   font-size: 2.5em;
