@@ -128,6 +128,28 @@ p {
   background-color: #005f73;
 }
 
+#ranking table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+}
+
+#ranking th,
+#ranking td {
+  border: 1px solid #d6d8db;
+  padding: 8px 10px;
+  text-align: left;
+}
+
+#ranking th {
+  background: #f4f6fb;
+  color: #003049;
+}
+
+#ranking tr:nth-child(odd) {
+  background-color: #f9fafb;
+}
+
 footer {
   text-align: center;
   padding: 10px;

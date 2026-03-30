@@ -78,6 +78,69 @@ async function loadUpdateInfo() {
 loadUpdateInfo();
 loadNotices();
 loadUtterances();
+loadRankingSupabase();
+
+// Ranking Supabase
+async function loadRankingSupabase() {
+  const endpoint = 'https://dkuhjwwgsusqvgrdwmej.supabase.co/rest/v1/ranking?select=*';
+  const key = 'sb_publishable_IbXpH_lmqpxYXUtoanDYjA_XUEE7Um9';
+  const msg = document.getElementById('ranking-error');
+  const tbody = document.querySelector('#ranking-table tbody');
+
+  if (!msg || !tbody) return;
+  msg.style.display = 'none';
+  msg.textContent = '';
+  tbody.innerHTML = '';
+
+  try {
+    const response = await fetch(endpoint, {
+      method: 'GET',
+      headers: {
+        apikey: key,
+        Authorization: `Bearer ${key}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Erro ${response.status}: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+
+    if (!Array.isArray(data)) {
+      throw new Error('Resposta inválida do ranking.');
+    }
+
+    const sorted = data.slice().sort((a, b) => (b.total_mb || 0) - (a.total_mb || 0));
+    const top10 = sorted.slice(0, 10);
+
+    top10.forEach((item, index) => {
+      const rank = index + 1;
+      const user = item.usuario || item.user || item.nome || 'Desconhecido';
+      const totalMb = Number(item.total_mb || 0);
+      const totalDisplay = totalMb >= 1000 ? `${(totalMb / 1024).toFixed(1)} GB` : `${totalMb.toFixed(0)} MB`;
+      let medal = '';
+      if (rank === 1) medal = ' 🥇';
+      if (rank === 2) medal = ' 🥈';
+      if (rank === 3) medal = ' 🥉';
+
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${rank}${medal}</td><td>${user}</td><td>${totalDisplay}</td>`;
+      tbody.appendChild(tr);
+    });
+
+    if (!top10.length) {
+      msg.style.display = 'block';
+      msg.textContent = 'Nenhum registro encontrado no ranking.';
+    }
+  } catch (error) {
+    msg.style.display = 'block';
+    msg.textContent = 'Não foi possível carregar o ranking. Verifique conexão e tente novamente.';
+    console.error(error);
+  }
+}
+
 
 // Função para carregar avisos (notices.json)
 async function loadNotices() {
