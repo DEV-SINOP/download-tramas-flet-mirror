@@ -125,8 +125,10 @@ async function loadRankingSupabase() {
       if (rank === 2) medal = ' 🥈';
       if (rank === 3) medal = ' 🥉';
 
+      const createdAtRaw = item.created_at || item.updated_at || null;
+      const createdAtText = createdAtRaw ? new Date(createdAtRaw).toLocaleString('pt-BR') : '-';
       const tr = document.createElement('tr');
-      tr.innerHTML = `<td>${rank}${medal}</td><td>${user}</td><td>${totalDisplay}</td>`;
+      tr.innerHTML = `<td>${rank}${medal}</td><td>${user}</td><td>${totalDisplay}</td><td>${createdAtText}</td>`;
       tbody.appendChild(tr);
     });
 

@@ -63,7 +63,8 @@ section {
   }
 
   section#download,
-  section#feedback {
+  section#feedback,
+  section#ranking {
     grid-column: 1 / -1;
   }
 }
