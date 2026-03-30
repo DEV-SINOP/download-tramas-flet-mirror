@@ -3,7 +3,7 @@
   "release": true,
   "pyinstaller_download_url": "https://github.com/DEV-SINOP/download-tramas-flet-mirror/releases/download/v4.4.7-release/pyinstaller-4.4.7-release.zip",
   "nuitka_download_url": "https://github.com/DEV-SINOP/download-tramas-flet-mirror/releases/download/v4.4.7-release/nuitka-4.4.7-release.zip",
-  "compiler": "nuitka",
+  "compiler": "pyinstaller",
   "pyinstaller_sha256": "f167d76d3977fe1371d992bdf0a8c1fa43a1f57d5dfd8823137ebb9e8e830fad",
   "nuitka_sha256": "25055c8b0d45939f62e652936f875b06b0e0c24deb2a15ba75fcaaa9b6fcaed1",
   "github_release": "https://github.com/DEV-SINOP/download-tramas-flet-mirror/releases/latest",
