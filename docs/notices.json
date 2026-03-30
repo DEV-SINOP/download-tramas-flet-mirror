@@ -12,13 +12,7 @@
         "message": "Agradecemos por utilizar nosso sistema. Estamos aqui para ajudar no que for necessário.\nGean F. e Lucas R.",
         "updated_at": "2026-03-25T18:00:00Z",
         "active": true
-    },
-    {
-        "id": "notice-2026-03-25-1",
-        "title": "Mensagem de testes",
-        "message": "O sistema estará em manutenção hoje das 23:00 às 00:30.",
-        "updated_at": "2026-03-25T18:00:00Z",
-        "active": false
     }
+
 
 ]

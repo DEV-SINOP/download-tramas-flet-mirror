@@ -41,6 +41,7 @@ async function loadUpdateInfo() {
       lastUpdateText = !isNaN(parsedDate) ? parsedDate.toLocaleString('pt-BR') : lastUpdateRaw;
     }
     document.getElementById('last-update').textContent = lastUpdateText;
+    document.getElementById('recommended-compiler').textContent = updateData.compiler || 'Não especificado';
     // Preferência para novos campos de download por bundle
     const pyinstallerUrl = updateData.pyinstaller_download_url || updateData.pyinstallerDownloadUrl || updateData.download_url || '#';
     const nuitkaUrl = updateData.nuitka_download_url || updateData.nuitkaDownloadUrl || '#';
