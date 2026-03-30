@@ -1,6 +1,6 @@
 # 🛰️ Download Tramas
 
-O **Download Tramas** é uma ferramenta moderna e intuitiva desenvolvida para simplificar a coleta, análise e visualização de rastros (tramas) de equipamentos. Construído com foco em performance e experiência do usuário, ele substitui ferramentas legadas por uma interface fluida e recursos avançados de geoprocessamento.
+O **Download Tramas** é uma ferramenta moderna e intuitiva desenvolvida para simplificar a coleta, análise e visualização de tramas de equipamentos. Construído com foco em performance e experiência do usuário, ele substitui ferramentas legadas por uma interface fluida e recursos avançados de geoprocessamento.
 
 ---
 
