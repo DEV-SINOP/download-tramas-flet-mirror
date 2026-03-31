@@ -15,9 +15,11 @@ header {
 
 .header-brand {
   display: inline-flex;
+  flex-wrap: wrap;
   align-items: center;
+  justify-content: center;
   gap: 12px;
-  margin-left: 12px;
+  margin-left: 0;
   text-align: left;
 }
 
@@ -97,6 +99,12 @@ p {
 }
 
 /* Mantém espaçamento interno e largura consistente em dispositivos menores */
+#download-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
 #download-buttons .button {
   min-width: 160px;
 }
@@ -157,3 +165,34 @@ footer {
   background-color: #003049;
   color: white;
 }
+
+/* Responsividade Adicional para Celular */
+@media (max-width: 600px) {
+  .header-brand {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  header h1 {
+    font-size: 1.8em;
+  }
+
+  header p {
+    font-size: 1em;
+    padding: 0 10px;
+  }
+
+  #download-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .button {
+    width: 100%;
+    max-width: 250px;
+  }
+
+  main {
+    padding: 10px;
+  }
+}
