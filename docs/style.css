@@ -326,6 +326,7 @@ td {
   padding: 16px;
   border-bottom: 1px solid var(--card-border);
   color: var(--text-main);
+  word-break: break-word; /* Evita nomes de usuários longos quebrem o layout */
 }
 
 tr:last-child td {
@@ -390,7 +391,17 @@ footer {
     text-align: center; 
     gap: 10px;
   }
-  section { padding: 20px; }
-  .button-group { flex-direction: column; }
-  .button { width: 100%; }
+  section { 
+    padding: 20px; 
+    max-width: 100%; /* Garante que sections não estourem */
+    overflow-x: hidden; /* Proteção extra */
+  }
+  .button-group { 
+    flex-direction: column; 
+    width: 100%;
+  }
+  .button { 
+    width: 100%; 
+    min-width: unset; /* CRÍTICO: Remove o bloqueio de 200px que estava empurrando pro lado */
+  }
 }
