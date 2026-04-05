@@ -1,11 +1,39 @@
-// Path do arquivo update.json
+// Configuração básica
 const updateJsonPath = 'update.json';
-
-// Configuração do repositório GitHub (substitua pelo seu nome/repo)
 const GITHUB_REPO = 'DEV-SINOP/download-tramas-flet-mirror';
 
-// Função para injetar o widget Utterances na página
-function loadUtterances() {
+// 🌓 Lógica de Tema (Dark/Light Mode)
+const themeBtn = document.getElementById('theme-toggle');
+const sunIcon = document.getElementById('sun-icon');
+const moonIcon = document.getElementById('moon-icon');
+const body = document.body;
+
+function setTheme(theme) {
+  if (theme === 'dark') {
+    body.setAttribute('data-theme', 'dark');
+    sunIcon.style.display = 'none';
+    moonIcon.style.display = 'block';
+  } else {
+    body.setAttribute('data-theme', 'light');
+    sunIcon.style.display = 'block';
+    moonIcon.style.display = 'none';
+  }
+  localStorage.setItem('theme', theme);
+  // Recarrega Utterances com o tema correto
+  loadUtterances(theme === 'dark' ? 'github-dark' : 'github-light');
+}
+
+themeBtn.addEventListener('click', () => {
+  const currentTheme = body.getAttribute('data-theme');
+  setTheme(currentTheme === 'dark' ? 'light' : 'dark');
+});
+
+// Inicializar tema com base no localStorage ou preferência do sistema
+const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+setTheme(savedTheme);
+
+// 💬 Utterances (Comentários via GitHub)
+function loadUtterances(theme = 'github-light') {
   const container = document.getElementById('utterances-container');
   if (!container) return;
 
@@ -16,71 +44,50 @@ function loadUtterances() {
   script.setAttribute('repo', GITHUB_REPO);
   script.setAttribute('issue-term', 'pathname');
   script.setAttribute('label', 'feedback');
-  script.setAttribute('theme', 'github-light');
+  script.setAttribute('theme', theme);
 
   container.innerHTML = '';
   container.appendChild(script);
 }
 
-// Função para carregar dados sobre a atualização
+// 📦 Informações de Atualização (Download e Versões)
 async function loadUpdateInfo() {
   try {
     const response = await fetch(updateJsonPath);
-    if (!response.ok) {
-      throw new Error(`Erro ao carregar arquivo: ${response.status}`);
-    }
+    if (!response.ok) throw new Error(`Erro: ${response.status}`);
     const updateData = await response.json();
 
-    // Atualizar a página com informações do JSON
-    document.getElementById('current-version').textContent = updateData.version || 'Informação não disponível';
-    // JSON real usa updated_at (e também aceitaremos lastUpdate por compatibilidade)
-    const lastUpdateRaw = updateData.updated_at || updateData.lastUpdate;
-    let lastUpdateText = 'Informação não disponível';
-    if (lastUpdateRaw) {
-      const parsedDate = new Date(lastUpdateRaw);
-      lastUpdateText = !isNaN(parsedDate) ? parsedDate.toLocaleString('pt-BR') : lastUpdateRaw;
+    document.getElementById('current-version').textContent = updateData.version || 'Indisponível';
+    
+    // Formatar data de atualização
+    const rawDate = updateData.updated_at || updateData.lastUpdate;
+    let updateText = 'Indisponível';
+    if (rawDate) {
+      const parsed = new Date(rawDate);
+      updateText = !isNaN(parsed) ? parsed.toLocaleDateString('pt-BR') : rawDate;
     }
-    document.getElementById('last-update').textContent = lastUpdateText;
-    document.getElementById('recommended-compiler').textContent = updateData.compiler || 'Não especificado';
-    // Preferência para novos campos de download por bundle
-    const pyinstallerUrl = updateData.pyinstaller_download_url || updateData.pyinstallerDownloadUrl || updateData.download_url || '#';
-    const nuitkaUrl = updateData.nuitka_download_url || updateData.nuitkaDownloadUrl || '#';
+    document.getElementById('last-update').textContent = updateText;
+    document.getElementById('recommended-compiler').textContent = updateData.compiler || '64 bits';
 
-    const pyinstallerLink = document.getElementById('pyinstaller-link');
-    const nuitkaLink = document.getElementById('nuitka-link');
+    updateBtn(document.getElementById('pyinstaller-link'), updateData.pyinstaller_download_url || updateData.pyinstallerDownloadUrl);
+    updateBtn(document.getElementById('nuitka-link'), updateData.nuitka_download_url || updateData.nuitkaDownloadUrl);
 
-    pyinstallerLink.href = pyinstallerUrl;
-    nuitkaLink.href = nuitkaUrl;
-
-    if (!pyinstallerUrl || pyinstallerUrl === '#') {
-      pyinstallerLink.textContent = 'PyInstaller indisponível';
-      pyinstallerLink.classList.add('disabled');
-      pyinstallerLink.removeAttribute('download');
-      pyinstallerLink.style.pointerEvents = 'none';
-      pyinstallerLink.style.opacity = '0.6';
-    }
-
-    if (!nuitkaUrl || nuitkaUrl === '#') {
-      nuitkaLink.textContent = 'Nuitka indisponível';
-      nuitkaLink.classList.add('disabled');
-      nuitkaLink.removeAttribute('download');
-      nuitkaLink.style.pointerEvents = 'none';
-      nuitkaLink.style.opacity = '0.6';
-    }
   } catch (error) {
-    console.error('Erro ao carregar as informações da atualização:', error);
-    document.getElementById('current-version').textContent = 'Erro ao carregar versão';
-    document.getElementById('last-update').textContent = 'Erro ao carregar data';
+    console.error('Erro ao carregar dados de atualização:', error);
   }
 }
 
-// Carregar dados assim que o JavaScript for executado
-loadUpdateInfo();
-loadNotices();
-loadUtterances();
-loadRankingSupabase();
+function updateBtn(btn, url) {
+  if (!url || url === '#') {
+    btn.textContent = 'Indisponível';
+    btn.style.opacity = '0.5';
+    btn.style.pointerEvents = 'none';
+  } else {
+    btn.href = url;
+  }
+}
 
-// Ranking Supabase
+// 🏆 Ranking Supabase
 async function loadRankingSupabase() {
   const endpoint = 'https://dkuhjwwgsusqvgrdwmej.supabase.co/rest/v1/ranking?select=*';
   const key = 'sb_publishable_IbXpH_lmqpxYXUtoanDYjA_XUEE7Um9';
@@ -88,9 +95,6 @@ async function loadRankingSupabase() {
   const tbody = document.querySelector('#ranking-table tbody');
 
   if (!msg || !tbody) return;
-  msg.style.display = 'none';
-  msg.textContent = '';
-  tbody.innerHTML = '';
 
   try {
     const response = await fetch(endpoint, {
@@ -102,121 +106,111 @@ async function loadRankingSupabase() {
       },
     });
 
-    if (!response.ok) {
-      throw new Error(`Erro ${response.status}: ${response.statusText}`);
-    }
-
+    if (!response.ok) throw new Error(`Erro ${response.status}`);
     const data = await response.json();
 
-    if (!Array.isArray(data)) {
-      throw new Error('Resposta inválida do ranking.');
-    }
-
-    const sorted = data.slice().sort((a, b) => (b.total_mb || 0) - (a.total_mb || 0));
-    const top10 = sorted.slice(0, 10);
+    const top10 = data.slice().sort((a, b) => (b.total_mb || 0) - (a.total_mb || 0)).slice(0, 10);
+    tbody.innerHTML = '';
 
     top10.forEach((item, index) => {
       const rank = index + 1;
       const user = item.usuario || item.user || item.nome || 'Desconhecido';
       const totalMb = Number(item.total_mb || 0);
-      const totalDisplay = totalMb >= 1000 ? `${(totalMb / 1024).toFixed(1)} GB` : `${totalMb.toFixed(0)} MB`;
-      let medal = '';
-      if (rank === 1) medal = ' 🥇';
-      if (rank === 2) medal = ' 🥈';
-      if (rank === 3) medal = ' 🥉';
+      const volume = totalMb >= 1000 ? `${(totalMb / 1024).toFixed(1)} GB` : `${totalMb.toFixed(0)} MB`;
+      
+      // Nova coluna: Visto por último (last_seen)
+      const lastSeenRaw = item.last_seen;
+      let lastSeenText = 'Nunca';
+      if (lastSeenRaw) {
+        const d = new Date(lastSeenRaw);
+        lastSeenText = !isNaN(d) ? d.toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', year: '2-digit', hour: '2-digit', minute: '2-digit' }) : lastSeenRaw;
+      }
+
+      let badgeClass = '';
+      if (rank === 1) badgeClass = 'rank-1';
+      else if (rank === 2) badgeClass = 'rank-2';
+      else if (rank === 3) badgeClass = 'rank-3';
 
       const tr = document.createElement('tr');
-      tr.innerHTML = `<td>${rank}${medal}</td><td>${user}</td><td>${totalDisplay}</td>`;
+      tr.className = badgeClass;
+      tr.innerHTML = `
+        <td><span class="badge-rank">${rank}</span></td>
+        <td style="font-weight: 500;">${user}</td>
+        <td style="color: var(--accent-color); font-weight: 700;">${volume}</td>
+        <td style="font-size: 0.9em; color: var(--text-muted);">${lastSeenText}</td>
+      `;
       tbody.appendChild(tr);
     });
 
-    if (!top10.length) {
-      msg.style.display = 'block';
-      msg.textContent = 'Nenhum registro encontrado no ranking.';
-    }
   } catch (error) {
     msg.style.display = 'block';
-    msg.textContent = 'Não foi possível carregar o ranking. Verifique conexão e tente novamente.';
+    msg.textContent = 'Indisponível no momento.';
     console.error(error);
   }
 }
 
-
-// Função para carregar avisos (notices.json)
+// 📢 Centro de Avisos
 async function loadNotices() {
   const noticesPath = 'notices.json';
   try {
     const response = await fetch(noticesPath);
-    if (!response.ok) {
-      throw new Error(`Erro ao carregar notices: ${response.status}`);
-    }
+    if (!response.ok) return;
     const noticesData = await response.json();
-
-    if (!Array.isArray(noticesData)) {
-      throw new Error('Formato inválido do notices.json: deve ser um array.');
-    }
 
     const activeNotices = noticesData.filter(n => n.active);
     const activeTextEl = document.getElementById('active-notice');
-    const titleEl = document.getElementById('notice-title');
-    const messageEl = document.getElementById('notice-message');
-    const dateEl = document.getElementById('notice-date');
     const detailsEl = document.getElementById('notice-details');
     const historyEl = document.getElementById('notice-history');
-    const prevBtn = document.getElementById('prev-notice');
-    const nextBtn = document.getElementById('next-notice');
-    const counterEl = document.getElementById('notice-counter');
     const controlsEl = document.getElementById('notice-controls');
+    
+    let currentIndex = 0;
 
-    let currentActiveIndex = 0;
-
-    const renderActiveNotice = index => {
+    const render = (idx) => {
       if (!activeNotices.length) {
-        activeTextEl.textContent = 'Nenhum aviso ativo';
+        activeTextEl.textContent = 'Sem avisos ativos';
         detailsEl.style.display = 'none';
         controlsEl.style.display = 'none';
         return;
       }
-
-      const notice = activeNotices[index];
-      activeTextEl.textContent = `${notice.title || 'Aviso ativo'}`;
-      titleEl.textContent = notice.title || '-';
-      messageEl.textContent = notice.message || '-';
-      dateEl.textContent = notice.updated_at ? new Date(notice.updated_at).toLocaleString('pt-BR') : '-';
+      const n = activeNotices[idx];
+      activeTextEl.textContent = n.title;
+      document.getElementById('notice-title').textContent = n.title;
+      document.getElementById('notice-message').textContent = n.message;
+      document.getElementById('notice-date').textContent = new Date(n.updated_at).toLocaleString('pt-BR');
       detailsEl.style.display = 'block';
-
+      
       if (activeNotices.length > 1) {
         controlsEl.style.display = 'flex';
-        counterEl.textContent = `${index + 1} de ${activeNotices.length}`;
-      } else {
-        controlsEl.style.display = 'none';
+        document.getElementById('notice-counter').textContent = `${idx + 1} / ${activeNotices.length}`;
       }
     };
 
-    prevBtn.addEventListener('click', () => {
-      if (!activeNotices.length) return;
-      currentActiveIndex = (currentActiveIndex - 1 + activeNotices.length) % activeNotices.length;
-      renderActiveNotice(currentActiveIndex);
+    document.getElementById('prev-notice').onclick = () => {
+      currentIndex = (currentIndex - 1 + activeNotices.length) % activeNotices.length;
+      render(currentIndex);
+    };
+    document.getElementById('next-notice').onclick = () => {
+      currentIndex = (currentIndex + 1) % activeNotices.length;
+      render(currentIndex);
+    };
+
+    render(currentIndex);
+
+    // Histórico
+    historyEl.innerHTML = '';
+    noticesData.sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at)).forEach(n => {
+      const li = document.createElement('li');
+      li.innerHTML = `<strong>${new Date(n.updated_at).toLocaleDateString()}</strong> · ${n.title}`;
+      historyEl.appendChild(li);
     });
 
-    nextBtn.addEventListener('click', () => {
-      if (!activeNotices.length) return;
-      currentActiveIndex = (currentActiveIndex + 1) % activeNotices.length;
-      renderActiveNotice(currentActiveIndex);
-    });
-
-    renderActiveNotice(currentActiveIndex);
-
-    historyEl.innerHTML = ''; // limpar histórico
-    const sorted = noticesData.slice().sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
-    sorted.forEach(notice => {
-      const item = document.createElement('li');
-      const date = notice.updated_at ? new Date(notice.updated_at).toLocaleString('pt-BR') : 'Data desconhecida';
-      item.textContent = `${date} · ${notice.title || 'sem título'} ${notice.active ? '(ativo)' : ''}`;
-      historyEl.appendChild(item);
-    });
-  } catch (error) {
-    console.error('Erro ao carregar notices:', error);
-    document.getElementById('active-notice').textContent = 'Erro ao carregar avisos';
+  } catch (e) {
+    console.error(e);
   }
 }
+
+// Iniciar
+loadUpdateInfo();
+loadRankingSupabase();
+loadNotices();
+loadUtterances(savedTheme === 'dark' ? 'github-dark' : 'github-light');

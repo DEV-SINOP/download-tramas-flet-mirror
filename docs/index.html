@@ -4,73 +4,119 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Atualização - Download e Processamento Solinftec</title>
+  <title>DownloadTramas - Dashboard de Atualização</title>
+  
+  <!-- Fontes -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
   <link rel="icon" href="icone.ico" type="image/x-icon">
   <link rel="stylesheet" href="style.css">
 </head>
 
-<body>
+<body data-theme="light">
   <header>
-    <div class="header-brand">
-      <img id="logo" src="logo.png" alt="Logo DownloadTramas">
-      <div>
+    <button class="theme-toggle" id="theme-toggle" aria-label="Alternar tema">
+      <svg id="sun-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></svg>
+      <svg id="moon-icon" style="display:none;" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+    </button>
+    
+    <div class="header-container">
+      <div class="header-brand">
+        <img id="logo" src="logo.png" alt="Logo DownloadTramas">
         <h1>DownloadTramas</h1>
-        <p>O melhor aplicativo para análise de tramas feito na Solinftec</p>
       </div>
+      <p>Ecossistema inteligente para análise e processamento de tramas Solinftec</p>
     </div>
   </header>
+
   <main>
-    <section id="info">
-      <h2>Informações da Atualização</h2>
-      <p><strong>Versão Atual:</strong> <span id="current-version">Carregando...</span></p>
-      <p><strong>Última Atualização:</strong> <span id="last-update">Carregando...</span></p>
-      <p><strong>Compilador Recomendado:</strong> <span id="recommended-compiler">Carregando...</span></p>
-      <h2>Baixe a Última Versão</h2>
-      <div id="download-buttons">
-        <a id="pyinstaller-link" href="#" class="button" download>Download (PyInstaller)</a>
-        <a id="nuitka-link" href="#" class="button" download>Download (Nuitka)</a>
+    <!-- Seção de Atualização -->
+    <section id="update">
+      <h2>🏠 Software & Download</h2>
+      <div class="info-item">
+        <span class="info-label">Versão Atual</span>
+        <span class="info-value" id="current-version">Carregando...</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Lançamento</span>
+        <span class="info-value" id="last-update">Carregando...</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Arquitetura</span>
+        <span class="info-value" id="recommended-compiler">Carregando...</span>
+      </div>
+
+      <div class="button-group">
+        <a id="nuitka-link" href="#" class="button" download>
+          <span>Baixar Nuitka (Otimizado)</span>
+        </a>
+        <a id="pyinstaller-link" href="#" class="button secondary" download>
+          <span>Baixar PyInstaller</span>
+        </a>
       </div>
     </section>
+
+    <!-- Seção de Avisos -->
     <section id="notices">
-      <h2>Avisos do App</h2>
-      <p><strong>Aviso Atual:</strong> <span id="active-notice">Carregando...</span></p>
-      <div id="notice-details" style="display:none;">
-        <p><strong>Título:</strong> <span id="notice-title"></span></p>
-        <p><strong>Mensagem:</strong> <span id="notice-message"></span></p>
-        <p><strong>Atualizado em:</strong> <span id="notice-date"></span></p>
+      <h2>📢 Centro de Avisos</h2>
+      <div id="notice-display-wrapper">
+        <p><strong>Destaque:</strong> <span id="active-notice">Carregando...</span></p>
+        
+        <div id="notice-details" style="display:none;">
+          <div class="notice-title-box" id="notice-title"></div>
+          <div class="notice-msg-box" id="notice-message"></div>
+          <div class="notice-meta">📅 Atualizado: <span id="notice-date"></span></div>
+        </div>
+
+        <div id="notice-controls" style="display:none; margin-top: 15px; gap: 10px; align-items: center;">
+          <button id="prev-notice" class="small-button">◀ Anterior</button>
+          <span id="notice-counter" style="color: var(--text-muted); font-size: 0.9em; font-weight: 600;"></span>
+          <button id="next-notice" class="small-button">Próximo ▶</button>
+        </div>
       </div>
-      <div id="notice-controls" style="display:none; margin-top: 8px;">
-        <button id="prev-notice" class="small-button" type="button">◀</button>
-        <button id="next-notice" class="small-button" type="button">▶</button>
-        <span id="notice-counter" style="margin-left: 8px; color: #555; font-size: 0.9em;"></span>
-      </div>
-      <h3>Histórico de Avisos</h3>
+      
+      <h3 style="margin-top: 25px; font-size: 1.1em;">Histórico Recente</h3>
       <ul id="notice-history"></ul>
     </section>
-    <section id="feedback">
-      <h2>Relato de Bug / Pedido de Desenvolvimento</h2>
-      <p>Use os campos abaixo para relatar bugs, solicitar novos recursos, duvidas, sugestões e elogios.</p>
-      <div id="utterances-container" style="margin-top: 1.2em;"></div>
+
+    <!-- Seção de Ranking -->
+    <section id="ranking" class="full-width">
+      <h2>🏆 Ranking de Download</h2>
+      <p style="color: var(--text-muted); margin-bottom: 20px;">Top 10 usuários por volume de tramas processadas.</p>
+      
+      <div id="ranking-error" style="color: var(--danger-color); display: none; padding: 15px; background: rgba(239, 68, 68, 0.1); border-radius: 10px; margin-bottom: 20px;"></div>
+      
+      <div class="table-container">
+        <table id="ranking-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Colaborador</th>
+              <th>Volume Total</th>
+              <th>Visto por Último</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Populado via JS -->
+          </tbody>
+        </table>
+      </div>
     </section>
-    <section id="ranking">
-      <h2>Ranking de Download</h2>
-      <p>Top 10 usuários por MB baixados .</p>
-      <div id="ranking-error" style="color: #c53030; margin-bottom: 1em; display: none;"></div>
-      <table id="ranking-table">
-        <thead>
-          <tr>
-            <th>Posição</th>
-            <th>Usuário</th>
-            <th>Total MB</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
+
+    <!-- Seção de Comentários/Feedback -->
+    <section id="feedback" class="full-width">
+      <h2>💬 Comunidade & Feedback</h2>
+      <p style="color: var(--text-muted);">Relate bugs, sugira melhorias ou faça elogios diretamente pela nossa integração com GitHub Issues.</p>
+      <div id="utterances-container" style="margin-top: 20px; min-height: 200px;"></div>
     </section>
   </main>
+
   <footer>
-    <p>&copy; 2026 Gean Ferreira e Lucas Rothmund</p>
+    <p>&copy; 2026 Gean Ferreira & Lucas Rothmund · Solinftec Engineering</p>
   </footer>
+
   <script src="script.js"></script>
 </body>
 
