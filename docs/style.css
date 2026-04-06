@@ -259,6 +259,24 @@ h2::before {
   transform: translateY(-2px);
 }
 
+.button.whatsapp {
+  background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+  color: white;
+  border: none;
+  box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+}
+
+.button.whatsapp:hover {
+  background: linear-gradient(135deg, #2ae06d 0%, #16a08f 100%);
+  box-shadow: 0 8px 25px rgba(37, 211, 102, 0.4);
+  transform: translateY(-2px) scale(1.02);
+}
+
+.button.whatsapp svg {
+  margin-right: 8px;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+}
+
 /* Notice Card */
 #notice-details {
   background: var(--card-bg);
