@@ -1,4 +1,10 @@
-[
+[ {
+        "id": "notice-2026-04-08-1",
+        "title": "Nosso site",
+        "message": "Visite nosso site e veja os rankings de downloads, os gráficos de uso do Download Tramas e interaja com a comunidade. Acesse através da aba Sobre",
+        "updated_at": "2026-04-08T18:00:00Z",
+        "active": true
+    },
     {
         "id": "notice-2026-03-25-3",
         "title": "Sobre a versão",
