@@ -25,12 +25,23 @@ function setTheme(theme) {
 
 themeBtn.addEventListener('click', () => {
   const currentTheme = body.getAttribute('data-theme');
-  setTheme(currentTheme === 'dark' ? 'light' : 'dark');
+  const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+  setTheme(newTheme);
+  
+  // Atualizar gráfico se existir
+  if (usageChart) {
+    usageChart.updateOptions({
+      theme: { mode: newTheme }
+    });
+  }
 });
 
 // Inicializar tema com base no localStorage ou preferência do sistema
 const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
 setTheme(savedTheme);
+
+// Global Chart Instance
+let usageChart = null;
 
 // 💬 Utterances (Comentários via GitHub)
 function loadUtterances(theme = 'github-light') {
@@ -209,8 +220,116 @@ async function loadNotices() {
   }
 }
 
+// 📊 Gráfico de Uso Supabase
+async function loadUsageChart() {
+  const endpoint = 'https://dkuhjwwgsusqvgrdwmej.supabase.co/rest/v1/usage_last_30_days?select=*';
+  const key = 'sb_publishable_IbXpH_lmqpxYXUtoanDYjA_XUEE7Um9';
+  const loader = document.getElementById('usage-chart-loader');
+  const chartEl = document.getElementById('usage-chart');
+
+  if (!chartEl) return;
+
+  try {
+    const response = await fetch(endpoint, {
+      method: 'GET',
+      headers: {
+        apikey: key,
+        Authorization: `Bearer ${key}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) throw new Error(`Erro ${response.status}`);
+    let data = await response.json();
+
+    // Se não houver dados, mostrar mensagem
+    if (!data.length) {
+      loader.innerHTML = '<span>Nenhum dado de uso nos últimos 30 dias.</span>';
+      return;
+    }
+
+    // Preparar dados para o gráfico
+    const categories = data.map(item => {
+      const d = new Date(item.day);
+      return d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+    });
+    const seriesData = data.map(item => Number(item.total_mb).toFixed(1));
+
+    loader.style.display = 'none';
+
+    const options = {
+      series: [{
+        name: 'Volume (MB)',
+        data: seriesData
+      }],
+      chart: {
+        type: 'area',
+        height: 350,
+        toolbar: { show: false },
+        zoom: { enabled: false },
+        fontFamily: 'Inter, sans-serif',
+        background: 'transparent'
+      },
+      colors: ['#3b82f6'],
+      fill: {
+        type: 'gradient',
+        gradient: {
+          shadeIntensity: 1,
+          opacityFrom: 0.45,
+          opacityTo: 0.05,
+          stops: [50, 100, 100]
+        }
+      },
+      dataLabels: { enabled: false },
+      stroke: {
+        curve: 'smooth',
+        width: 3
+      },
+      xaxis: {
+        categories: categories,
+        axisBorder: { show: false },
+        axisTicks: { show: false },
+        labels: {
+          style: {
+            colors: 'var(--text-muted)',
+            fontSize: '12px'
+          }
+        }
+      },
+      yaxis: {
+        labels: {
+          style: {
+            colors: 'var(--text-muted)',
+            fontSize: '12px'
+          },
+          formatter: (val) => val >= 1024 ? (val / 1024).toFixed(1) + ' GB' : val.toFixed(0) + ' MB'
+        }
+      },
+      grid: {
+        borderColor: 'var(--card-border)',
+        strokeDashArray: 4,
+        padding: { left: 20, right: 20 }
+      },
+      theme: {
+        mode: body.getAttribute('data-theme') || 'light'
+      },
+      tooltip: {
+        x: { format: 'dd/MM' }
+      }
+    };
+
+    usageChart = new ApexCharts(chartEl, options);
+    usageChart.render();
+
+  } catch (error) {
+    loader.innerHTML = `<span style="color: var(--danger-color)">Indisponível no momento: ${error.message}</span>`;
+    console.error('Erro ao carregar gráfico:', error);
+  }
+}
+
 // Iniciar
 loadUpdateInfo();
 loadRankingSupabase();
+loadUsageChart();
 loadNotices();
 loadUtterances(savedTheme === 'dark' ? 'github-dark' : 'github-light');

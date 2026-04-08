@@ -115,12 +115,27 @@
       <p style="color: var(--text-muted);">Relate bugs, sugira melhorias ou faça elogios diretamente pela nossa integração com GitHub Issues.</p>
       <div id="utterances-container" style="margin-top: 20px; min-height: 200px;"></div>
     </section>
+
+    <!-- Seção de Gráfico de Uso -->
+    <section id="usage" class="full-width">
+      <h2>📊 Uso nos Últimos 30 Dias</h2>
+      <p style="color: var(--text-muted); margin-bottom: 20px;">Volume total de tramas processadas diariamente (MB).</p>
+      
+      <div id="usage-chart-container" style="min-height: 350px; width: 100%;">
+        <div id="usage-chart-loader" class="chart-loader">
+          <div class="spinner"></div>
+          <span>Carregando estatísticas...</span>
+        </div>
+        <div id="usage-chart"></div>
+      </div>
+    </section>
   </main>
 
   <footer>
     <p>&copy; 2026 Gean Ferreira & Lucas Rothmund · Protocolos Embarcados e Dev Soluções</p>
   </footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
   <script src="script.js"></script>
 </body>
 
