@@ -250,7 +250,9 @@ async function loadUsageChart() {
 
     // Preparar dados para o gráfico
     const categories = data.map(item => {
-      const d = new Date(item.day);
+      // Divide a string "YYYY-MM-DD" e cria a data localmente para evitar o atraso de 1 dia (timezone UTC)
+      const [year, month, day] = item.day.split('-');
+      const d = new Date(year, month - 1, day);
       return d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
     });
     const seriesData = data.map(item => Number(item.total_mb).toFixed(1));
