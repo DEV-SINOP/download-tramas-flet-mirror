@@ -292,9 +292,11 @@ async function loadUsageChart() {
         axisBorder: { show: false },
         axisTicks: { show: false },
         labels: {
+          rotate: -45,
+          rotateAlways: true,
           style: {
             colors: 'var(--text-muted)',
-            fontSize: '12px'
+            fontSize: '10px'
           }
         }
       },
@@ -310,7 +312,7 @@ async function loadUsageChart() {
       grid: {
         borderColor: 'var(--card-border)',
         strokeDashArray: 4,
-        padding: { left: 20, right: 20 }
+        padding: { left: 20, right: 20, bottom: 20 }
       },
       theme: {
         mode: body.getAttribute('data-theme') || 'light'
