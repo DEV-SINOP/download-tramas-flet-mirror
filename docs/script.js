@@ -168,7 +168,18 @@ async function loadNotices() {
     if (!response.ok) return;
     const noticesData = await response.json();
 
-    const activeNotices = noticesData.filter(n => n.active);
+    const checkActive = (val) => val === true || String(val).toLowerCase() === 'true';
+    const activeNotices = noticesData.filter(n => checkActive(n.active));
+    
+    // Ocultar a seção inteira se não houver NENHUM aviso ativo
+    const noticesSection = document.getElementById('notices');
+    if (!activeNotices.length) {
+      if (noticesSection) noticesSection.style.display = 'none';
+      return;
+    } else {
+      if (noticesSection) noticesSection.style.display = 'block';
+    }
+
     const activeTextEl = document.getElementById('active-notice');
     const detailsEl = document.getElementById('notice-details');
     const historyEl = document.getElementById('notice-history');
@@ -193,6 +204,8 @@ async function loadNotices() {
       if (activeNotices.length > 1) {
         controlsEl.style.display = 'flex';
         document.getElementById('notice-counter').textContent = `${idx + 1} / ${activeNotices.length}`;
+      } else {
+        controlsEl.style.display = 'none';
       }
     };
 
@@ -207,9 +220,9 @@ async function loadNotices() {
 
     render(currentIndex);
 
-    // Histórico
+    // Histórico: mostrar apenas os ativos (ou todos, mas agora filtramos os inativos de tudo para não aparecerem)
     historyEl.innerHTML = '';
-    noticesData.sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at)).forEach(n => {
+    activeNotices.sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at)).forEach(n => {
       const li = document.createElement('li');
       li.innerHTML = `<strong>${new Date(n.updated_at).toLocaleDateString()}</strong> · ${n.title}`;
       historyEl.appendChild(li);
