@@ -10,14 +10,14 @@
         "title": "Sobre a versão",
         "message": "Esta é a versão 4.0 do sistema, lançada em 25 de março de 2026. Esta versão inclui melhorias de desempenho, correções de bugs e um visual atualizado.",
         "updated_at": "2026-03-25T18:00:00Z",
-        "active": true
+        "active": false
     },
         {
         "id": "notice-2026-03-25-2",
         "title": "Boas vindas",
         "message": "Agradecemos por utilizar nosso sistema. Estamos aqui para ajudar no que for necessário.\nGean F. e Lucas R.",
         "updated_at": "2026-03-25T18:00:00Z",
-        "active": true
+        "active": false
     }
 
 
