@@ -7,5 +7,6 @@
   "pyinstaller_sha256": "7844d87afb9e72448f28c654a8c199d3b43a28daeb93008e797ac3ee68e05521",
   "nuitka_sha256": "8b2d7c9040420609449ec86cf633b68c8492ce5be21bf8863ec0197ec0b0bd56",
   "github_release": "https://github.com/DEV-SINOP/download-tramas-flet-mirror/releases/latest",
-  "updated_at": "2026-04-16T18:19:28Z"
+  "updated_at": "2026-04-16T18:19:28Z",
+  "beta_users": ["aleatorio.teste"]
 }
